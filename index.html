@@ -228,3 +228,104 @@ function addGeoJSON(url, name, options) {
             layers[name] = L.geoJSON(d, options).addTo(map);
         });
 }
+
+
+
+
+
+    /* Control */
+addGeoJSON(
+    'https://playframap.github.io/data/Ukraine.geojson',
+    'Ukraine',
+    {
+        pane: 'controlPane',
+        style: {
+            color: '#4cb1ff',
+            weight: 1.6,
+            fillColor: '#377eb8',
+            fillOpacity: 0.3
+        }
+    }
+);
+addGeoJSON(
+    'https://playframap.github.io/data/Russia.geojson',
+    'Russia',
+    {
+        pane: 'controlPane',
+        style: {
+            color: '#ff0000',
+            weight: 1.6,
+            fillColor: '#ca0000',
+            fillOpacity: 0.3
+        }
+    }
+);
+
+/* Defence */
+addGeoJSON(
+    'https://playframap.github.io/data/ditches.geojson',
+    'Ditches',
+    { pane: 'fortPane', style: { color: '#ffc300', weight: 1.5 } }
+);
+addGeoJSON(
+    'https://playframap.github.io/data/teeth.geojson',
+    'Teeth',
+    { pane: 'fortPane', style: { color: '#00ffff', weight: 1.5 } }
+);
+addGeoJSON(
+    'https://playframap.github.io/data/wire.geojson',
+    'Wire',
+    { pane: 'fortPane', style: { color: '#bcbcbc', weight: 1.5 } }
+);
+
+/* ===== TOGGLES ===== */
+const toggleLayer = (name, on) => {
+    if (!layers[name]) return;
+    on ? layers[name].addTo(map) : map.removeLayer(layers[name]);
+};
+
+const tForts = document.getElementById('toggle-forts');
+const tDitches = document.getElementById('toggle-ditches');
+const tTeeth = document.getElementById('toggle-teeth');
+const tWire = document.getElementById('toggle-wire');
+const tControl = document.getElementById('toggle-control');
+const tUkraine = document.getElementById('toggle-ukraine');
+const tRussia = document.getElementById('toggle-russia');
+
+tForts.onchange = e =>
+    ['Ditches', 'Teeth', 'Wire'].forEach(n => toggleLayer(n, e.target.checked));
+
+tDitches.onchange = e => toggleLayer('Ditches', e.target.checked);
+tTeeth.onchange   = e => toggleLayer('Teeth', e.target.checked);
+tWire.onchange    = e => toggleLayer('Wire', e.target.checked);
+
+tControl.onchange = e => {
+    toggleLayer('Ukraine', e.target.checked);
+    toggleLayer('Russia', e.target.checked);
+};
+tUkraine.onchange = e => toggleLayer('Ukraine', e.target.checked);
+tRussia.onchange  = e => toggleLayer('Russia', e.target.checked);
+
+/* ===== UI ===== */
+const settingsBtn = document.getElementById('left-settings-btn');
+const infoBtn = document.getElementById('left-info-btn');
+const settings = document.getElementById('topright-controls');
+const info = document.getElementById('info-overlay');
+
+settingsBtn.onclick = () => {
+    info.style.display = 'none';
+    settings.style.display = settings.style.display === 'block' ? 'none' : 'block';
+};
+infoBtn.onclick = () => {
+    settings.style.display = 'none';
+    info.style.display = info.style.display === 'flex' ? 'none' : 'flex';
+};
+
+document.getElementById('legend-toggle').onclick = () => {
+    const l = document.getElementById('legend');
+    l.style.display = l.style.display === 'block' ? 'none' : 'block';
+};
+</script>
+
+</body>
+</html>
